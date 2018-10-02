@@ -1,0 +1,71 @@
+<!--Los apuntes estan abajo de esto-->
+
+<h4>Formularios <small>template</small></h4>
+<hr>
+<!--El ngSubmit Es una funcion queva ha llamar algo cuando haya un Submit-->
+<!---Utilizando la aproximacion por template necesitamos hacerle una referencia local
+para darle una referencia local ha este objeto lo hacemos con #-->
+<form (ngSubmit)="guardar(forma)" #forma="ngForm" novalidate="">
+
+  <div>
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Nombre</label>
+      <div class="col-8">
+<!--minlength maxlengt= determinamos un minnimo o un maximo de carecteres que queremos en el campo-->
+<!--el ngModel para que funcione debe tener el atributo name y cuando se pone crea unas clases tal
+como ng-untoched que no informa que el campoo no ha sido tocado alguna ves o un ng-touched uqe nos informa que si -->
+        <input class="form-control"
+               type="text"
+               placeholder="Nombre"
+               name="nombre"
+               ngModel
+               minlength="5"
+               required>
+
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Apellido</label>
+      <div class="col-8">
+
+        <input class="form-control"
+               type="text"
+               placeholder="Apellido"
+               name="apellido"
+               ngModel
+               required>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Correo</label>
+    <div class="col-md-8">
+
+      <input class="form-control"
+             type="email"
+             placeholder="Correo electrónico"
+             name="correo"
+             ngModel
+             required>
+    </div>
+  </div>
+
+
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">&nbsp;</label>
+    <div class="input-group col-md-8">
+      <button type="submit" class="btn btn-outline-primary">
+        Guardar
+      </button>
+    </div>
+  </div>
+
+</form>
+<!---->
+<!--Para uno utilizar ng model debe utilizar tambien name-->
+<!--Para quitar el mensaje de no valid que maneja html5 se pone esto en < form novalidate> -->
