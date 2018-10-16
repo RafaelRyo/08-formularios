@@ -4,12 +4,14 @@
 <hr>
 <!--El ngSubmit Es una funcion queva ha llamar algo cuando haya un Submit-->
 <!---Utilizando la aproximacion por template necesitamos hacerle una referencia local
-para darle una referencia local ha este objeto lo hacemos con #-->
+para darle una referencia local ha este objeto lo hacemos con #forma-->
 <form (ngSubmit)="guardar(forma)" #forma="ngForm" novalidate="">
 
   <div>
-
-    <div class="form-group row">
+                                <!-- Aqui utlizamos una clase que nos brinda bootstrap para maenjar las validaciones
+                                de los campos utilizando la clase has-danger y las validaciones que tienen cada campoo
+                                como se muestra aqui-->
+    <div class="form-group row" [ngClass]="{ 'has-danger': (nombre.errors?.required || nombre.errors?.minlength)&& nombre.touched}">
       <label class="col-2 col-form-label">Nombre</label>
       <div class="col-8">
 <!--minlength maxlengt= determinamos un minnimo o un maximo de carecteres que queremos en el campo-->
@@ -19,9 +21,27 @@ como ng-untoched que no informa que el campoo no ha sido tocado alguna ves o un 
                type="text"
                placeholder="Nombre"
                name="nombre"
-               ngModel
-               minlength="5"
-               required>
+               [(ngModel)]="usuario.nombre"
+               minlength="4"
+               required
+               #nombre="ngModel">
+               <!--#nombre es el nombre local del input-->
+<!--Colocando [ngModel] podemos decirle a angular que los campos del objeto usuario aparescan en los imput-->
+<!-- cuando colocamos {(ngModel)} angular no tan solo escucha si que tambien emite los cambios que tu hagas desde
+el imput-->
+        <div class="form-control-feedback"
+             *ngIf="nombre.errors?.required">
+          Este campo es requerido
+
+        </div>
+        <!-- En el arreglo que nos esta creando NgMOdel estan las siguientes condiciones de los campos
+        COmo el numero minimo de caracteres que seria minlength se encuentra en el arreglo de controls:nombre:
+        errors:minlength.-->
+
+        <div  class="form-control-feedback"
+              *ngIf="nombre.errors?.minlength">
+          son como mino {{nombre.errors.minlength.requiredLength}} caracteres
+        </div>
 
       </div>
     </div>
@@ -34,9 +54,21 @@ como ng-untoched que no informa que el campoo no ha sido tocado alguna ves o un 
                type="text"
                placeholder="Apellido"
                name="apellido"
-               ngModel
-               required>
+               [(ngModel)]="usuario.apellido"
+               minlength="4"
+               required
+               #apellido="ngModel">
+               <!-- #apellido esto es un nombre local del input hay que igualar a ngMOdel al arreglo question
+             angular nos esta creando por nosotros-->
+               <div *ngIf="apellido.errors?.required">
+                 Este campo es requerido
+               </div>
+               <div  *ngIf="apellido.errors?.minlength">
+                 son como mino {{apellido.errors.minlength.requiredLength}} caracteres
+
+               </div>
       </div>
+
     </div>
 
   </div>
@@ -49,8 +81,64 @@ como ng-untoched que no informa que el campoo no ha sido tocado alguna ves o un 
              type="email"
              placeholder="Correo electrónico"
              name="correo"
-             ngModel
-             required>
+             [(ngModel)]="usuario.correo"
+             required
+             minlength="8"
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+             #correo="ngModel">
+
+             <div *ngIf="correo.errors?.required">
+               Este campo es requerido
+             </div>
+             <div  *ngIf="correo.errors?.pattern">
+               No es permitido
+             </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Pais</label>
+    <div class="col-md-8">
+
+      <select [(ngModel)]="usuario.pais"
+              class="form-control"
+              name="pais" >
+              <option value="">Seleccione un pais</option>
+              <option *ngFor="let p of paises"
+                      value="p.codigo">{{p.nombre}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Sexo</label>
+    <div class="col-md-8">
+        <label *ngFor="let s of sexos"
+               class="custom-control custom-radio">
+          <input [(ngModel)]="usuario.sexo"
+                 name="sexo"
+                 [value]="s"
+                 type="radio"
+                 class="custom-control-input"
+                 required>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">{{s}} </span>
+        </label>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Acepta</label>
+    <div class="col-md-8">
+      <label class="custom-control custom-checkbox">
+        <input [(ngModel)]="usuario.Acepta"
+               name="acepta"
+               type="checkbox"
+               class="custom-control-input"
+               required>
+        <span class="custom-control-indicator"></span>
+        <span class="custom-control-description">Acepta las condiciones</span>
+      </label>
     </div>
   </div>
 
@@ -59,12 +147,16 @@ como ng-untoched que no informa que el campoo no ha sido tocado alguna ves o un 
   <div class="form-group row">
     <label class="col-2 col-form-label">&nbsp;</label>
     <div class="input-group col-md-8">
-      <button type="submit" class="btn btn-outline-primary">
+      <button type="submit"
+              class="btn btn-outline-primary"
+              [disabled]="!forma.valid">
+              <!--Aqui estamos utilizando el arreglo forma y sitando algo que se llama valid que nos dice si
+              esta true o false nuestro form y asi poder controlar que no puedan hacer submit sin que el form este en true
+              osea con todos los input llenos-->
         Guardar
       </button>
     </div>
   </div>
-
 </form>
 <!---->
 <!--Para uno utilizar ng model debe utilizar tambien name-->
